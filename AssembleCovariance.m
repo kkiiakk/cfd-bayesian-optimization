@@ -1,13 +1,16 @@
+%AssembleCovariance: Assembles the squared exponential covariance matrix
+
+% Part of the CFD combustion optimization project with flue gas
+% recirculation (FGR).
+% Author: Kiia Kaaresvirta
+
+% Parts of the final code edited using the following exercise 
+% as initial template: 
 %  Solution to problem sheet on Gaussian Processes
 %
 %  Lecture: Probability Theory and Uncertainty Quantification
 %           Technical University of Munich
-%
-%
-% DISCLAIMER:
-% The following code has been written for didactic purposes. As such the
-% code is not properly vectorized and includes numeric operations which
-% are generally not adviseable.
+
 
 function C = AssembleCovariance(x1,x2,gamma,l)
 
