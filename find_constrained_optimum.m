@@ -12,7 +12,7 @@ function result = find_constrained_optimum( ...
 %   minimize predicted physical NOx mean
 %
 % Constraint:
-%   P(T_out >= 0.99*T_baseline) >= 0.95
+%   P(T_out >= 0.95*T_baseline) >= 0.95
 %
 % Optimization is performed in normalized input space [0,1]^3.
 
