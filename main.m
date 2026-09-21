@@ -1,21 +1,34 @@
+% CFD Combustion (with FGR) Optimization using 
+% Gaussian Process Surrogate Models
+
+% Buids a Gaussian Process Surrogate model for outlet (logarithmic)
+% NOx mass fraction and outlet temperature using CFD simulation data. 
+
+% Workflow includes 
+% - hyperparameter estimation (l, gamma, sigma),
+% - GP predictive uncertainty (no hyperparameter uncertainty), 
+% - constrained expected improvement sampling,
+% - continuous operating point optimization
+
+
+% Author: Kiia Kaaresvirta
+
+% See README....
+
+% Parts of the final code edited using the following exercise 
+% as initial template: 
 %  Solution to problem sheet on Gaussian Processes
 %
 %  Lecture: Probability Theory and Uncertainty Quantification
 %           Technical University of Munich
-%
-%
-% DISCLAIMER: 
-%
-% The following code has been written for didactic purposes. As such the
-% code is not properly vectorized and includes numeric operations which
-% are generally not adviseable (e.g. explicit matrix inversions).
 
 
-% This solution is used as a template for CFD Combustion with FGR
-% optimization
+
+
 clearvars;
 clc;
 
+% run CFD data file
 run('CFD_Data.m');
 
 
@@ -57,7 +70,7 @@ title('CFD training data - outlet T');
 
 
 
-%% create training data: normalized X, standardized yNOx and xT
+%% create training data: normalized inputs and standardized yNOx and xT
 x_training = x;
 
 % standardize outputs
@@ -82,7 +95,7 @@ y_training_T   = standardize(yT, mean_T, std_T);
 % Fix one of the three input parameters for better visualization
 v_air_fixed = 0.379563; 
 
-% Grid for plotting (Sopol sampling bounds)
+% Grid for plotting (using initial Sopol sampling bounds as design space)
 vFGR_plot = linspace(2, 10, 40);
 TFGR_plot = linspace(373.15, 1000, 40);
 
@@ -106,25 +119,14 @@ Npredict = size(x_predict,1); % used for numerical stability
 
 % GaussianProcessRegression adds noise to K training covariance
 [mu_NOx, Sigma_NOx] = GaussianProcessRegression(x_training, y_training_NOx, x_predict,[gamma_NOx, l_NOx, noise_stddev_NOx]);
-%L_NOx = chol(Sigma_NOx,'lower');
 
 
 %% Gaussian process regression for T
 
 [mu_T, Sigma_T] = GaussianProcessRegression(x_training, y_training_T, x_predict,[gamma_T, l_T, noise_stddev_T]);
-%L_T = chol(Sigma_T,'lower');
 
 
 %% Plot GP regression in physical units
-
-
-%created a function for input/output tranformation to physical units
-% not completed / running yet
-
-%[VFGR_phys, TFGR_phys, mu_NOx_phys, mu_T_phys, std_NOx_phys, std_T_phys] = ...
-%    transform_to_phys_units(VGR_grid, TFGR_grid, mu_NOx, mean_NOx, std_NOx,...
-%    mu_T, mean_T, std_T, Sigma_NOx, Sigma_T)
-
 
 % Transform prediction INPUTS back to physical units
 x_predict_phys = unnormalize(x_predict, lb, ub);
@@ -152,11 +154,11 @@ std_NOx_std = ...
         mean_NOx, ...
         std_NOx);
 
-%% Plot GP regression with NOISE
+%% Plot GP regression with chosen hyperparameters
 
 visualize_uncertainty(VFGR_grid, VFGR_phys, TFGR_phys, mu_NOx_phys, std_NOx_phys, mu_T_phys, std_T_phys)
 
-sgtitle(['GP REGRESSIOn (with noise) at v_{air} = ', ...
+sgtitle(['GP Regression at v_{air} = ', ...
     num2str(v_air_fixed), ' m/s']);
 
 
@@ -185,7 +187,7 @@ l_NOx     = theta_NOx(2);
 sigma_NOx = theta_NOx(3);
 
 
-%T_FGR
+%Temperature GP
 MarginalLikelihoodFct_T = @(theta) CalculateMarginalLikelihood(x_training,y_training_T, theta);
 
 
