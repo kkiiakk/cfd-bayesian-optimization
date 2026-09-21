@@ -1,13 +1,20 @@
+% CalculateMarginalLikelihood: Calculates the GP logarithmic marginal 
+% likelihood for a set of hyperparameters (gamma, l, sigma)
+% (Used for hyperparameter optimization)
+
+% Part of the CFD combustion optimization project with flue gas
+% recirculation (FGR).
+
+% Author: Kiia Kaaresvirta
+
+% Parts of the final code edited using the following exercise 
+% as initial template: 
 %  Solution to problem sheet on Gaussian Processes
 %
 %  Lecture: Probability Theory and Uncertainty Quantification
 %           Technical University of Munich
 %
-%
-% DISCLAIMER: 
-% The following code has been written for didactic purposes. As such the
-% code is not properly vectorized and includes numeric operations which
-% are generally not adviseable (e.g. explicit matrix inversions).
+
 
 function [mrgnLkl,K] = CalculateMarginalLikelihood(x,y,theta)
 
