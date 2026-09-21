@@ -1,13 +1,20 @@
+% GaussianProcessRegression: Computes the posterior mean and covariance of
+% the Gaussian Process surrogate models 
+
+% Cholesky factorization is used to solve the posterior mean and
+% covariance without inverting the covariance matrix.
+
+% Part of the CFD combustion optimization project with flue gas
+% recirculation (FGR).
+% Author: Kiia Kaaresvirta
+
+% Parts of the final code edited using the following exercise 
+% as initial template: 
 %  Solution to problem sheet on Gaussian Processes
 %
 %  Lecture: Probability Theory and Uncertainty Quantification
 %           Technical University of Munich
 %
-%
-% DISCLAIMER: 
-% The following code has been written for didactic purposes. As such the
-% code is not properly vectorized and includes numeric operations which
-% are generally not adviseable (e.g. explicit matrix inversions).
 
 
 function [mu,Sigma] = GaussianProcessRegression(x_training,y_training,x_predict,theta, flag)
@@ -23,11 +30,16 @@ K_ss = AssembleCovariance(x_predict, x_predict, theta(1), theta(2));
 if nargin > 4
     K_ss = K_ss + (theta(3)^2)*eye(size(x_predict,1));
 end
-    
+
+
+L = chol(K,'lower');
    
-% Find distribution conditional on observations
-mu = K_s'*inv(K)*y_training;                                  % in reality, one never takes the inverse : solve equation system, or use Cholesky decomposition
-Sigma = K_ss - K_s'*inv(K)*K_s + 1e-8*eye(size(x_predict,1)); % we add diagonal matrix for numeric stabilization
+% Find distribution conditional on observations using Cholesky
+% decomposition
+alpha = L' \ (L \ y_training);
+mu = K_s' * alpha;
+V = L \ K_s;
+Sigma = K_ss - V' * V;
 
 
 end
