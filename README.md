@@ -21,7 +21,7 @@ Introducing FGR already reduced NO emissions substantially compared with the ori
 
 The full CFD project report is included in this repository:
 
-[CFD report]
+[Full CFD project report](CFD_Combustion_FGR_Bayesian_Optimization.pdf)
 
 ## Bayesian Optimization problem
 
