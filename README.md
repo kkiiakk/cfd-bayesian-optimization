@@ -189,10 +189,7 @@ Required functionality includes:
 - Optimization Toolbox (`fmincon`)
 - Statistics and Machine Learning Toolbox (`sobolset`, `normcdf`, `norminv`)
 
-To run the complete workflow, place all `.m` files in the same directory and run:
-
-```matlab
-main
+To run the complete workflow, place all `.m` files in the same directory and run MATLAB and `main.m`
 
 ## Project contribution
 
@@ -200,7 +197,7 @@ This work was completed as part of the TUM course project *CFD – Simulation fo
 
 The baseline CFD modelling, mesh study, NO formation analysis and FGR implementation were completed collaboratively as a group project.
 
-The Bayesian Optimization extension was independently developed and impelmented by me, including:
+The Bayesian Optimization extension was independently developed and implemented by me, including:
 
 - Gaussian Process surrogate modelling for NO and outlet temperature
 - formulation of the probabilistic temperature constraint
