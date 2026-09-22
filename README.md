@@ -119,7 +119,11 @@ The NO prediction at this point differed from the corresponding CFD result by ap
 
 The sequential validation also showed an important limitation of the surrogate model: some predicted optima had considerably larger temperature prediction errors. This motivated additional CFD verification and refitting rather than relying on the GP optimum alone.
 
+![GP posterior mean and uncertainty](figures/Figure_optimum.png)
+
 The results also showed a clear trade-off between NO reduction and combustion conditions. Very low-NO regions were often associated with lower outlet temperatures and increased unburned methane. A useful extension of the optimization would therefore be to include an additional constraint on outlet methane concentration or combustion completeness.
+
+![GP posterior mean and uncertainty](figures/Figure_GP_prediction_heatmap.png)
 
 ## Repository structure
 
